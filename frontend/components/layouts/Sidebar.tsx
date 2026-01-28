@@ -2,7 +2,7 @@
 
 import { AlertCircle, AlertOctagon, AlertTriangle, Briefcase, ChevronDown, Home, Layers3, LockIcon, Search, Settings, ShieldAlert, User, Users, X } from 'lucide-react';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import SidebarLink from './SidebarLink';
 import { useAppDispatch, useAppSelector } from '@/libs/redux/hooks';
 import { setIsSidebarCollapsed } from '@/libs/redux/features/theme/themeSlice';
