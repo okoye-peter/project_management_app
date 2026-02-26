@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/libs/redux/hooks';
 import { useGetTasksQuery } from '@/libs/redux/services/api';
-import { DisplayOption, ViewMode } from 'gantt-task-react'
+import { DisplayOption, Gantt, ViewMode, Task } from 'gantt-task-react'
 import { useMemo, useState } from 'react';
 import LoadingOverlay from '../LoadingOverlay';
 import { goeyToast } from 'goey-toast';
@@ -22,14 +22,14 @@ const TimeLineView = ({ id, setIsNewTaskModalOpen }: Props) => {
         locale: 'en-US',
     });
 
-    const ganttTasks = useMemo(() => {
+    const ganttTasks: Task[] = useMemo(() => {
         return (
             tasks?.data?.map((task) => ({
                 name: task.title.toLocaleLowerCase(),
                 start: new Date(task.startDate as string),
                 end: new Date(task.dueDate as string),
                 id: `Task-${task.id}`,
-                type: 'task' as "TaskType",
+                type: 'task' as const,
                 progress: task.points ? (task.points / 10) * 100 : 0,
                 isDisabled: false
             })) || []
@@ -79,7 +79,19 @@ const TimeLineView = ({ id, setIsNewTaskModalOpen }: Props) => {
                     </select>
                 </div>
             </div>
-            <div className="overflow-hidden rounded-md bg-white shadow dark:bg-dark-secondary dark:text-white"></div>
+            <div className="overflow-hidden rounded-md bg-white shadow dark:bg-dark-secondary dark:text-white">
+                <div className='timeline'>
+                    <Gantt
+                        tasks={ganttTasks}
+                        viewMode={displayOptions.viewMode}
+                        columnWidth={displayOptions.viewMode === ViewMode.Month ? 150 : 100}
+                        listCellWidth='100px'
+                        barBackgroundColor={isDarkMode ? '#101214' : '#aeb8c2'}
+                        barBackgroundSelectedColor={isDarkMode ? '#000' : '#9ba1e6'}
+                    />
+                </div>
+
+            </div>
         </div>
     )
 }
