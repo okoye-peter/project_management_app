@@ -119,7 +119,7 @@ const NewProjectModal = ({ isOpen, onClose }: Props) => {
                             id="startDate"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
-                            className={`${inputStyles} border-gray-300 dark:border-[#2d3135]`}
+                            className={`${inputStyles} border-gray-300 dark:border-stroke-dark`}
                         />
                     </div>
                     <div>
@@ -131,7 +131,7 @@ const NewProjectModal = ({ isOpen, onClose }: Props) => {
                             id="dueDate"
                             value={dueDate}
                             onChange={(e) => setDueDate(e.target.value)}
-                            className={`${inputStyles} border-gray-300 dark:border-[#2d3135]`}
+                            className={`${inputStyles} border-gray-300 dark:border-stroke-dark`}
                         />
                     </div>
                 </div>
