@@ -6,10 +6,13 @@ import { useState } from 'react';
 import SidebarLink from './SidebarLink';
 import { useAppDispatch, useAppSelector } from '@/libs/redux/hooks';
 import { setIsSidebarCollapsed } from '@/libs/redux/features/theme/themeSlice';
+import { useGetProjectsQuery } from '@/libs/redux/services/api';
 
 const Sidebar = () => {
     const [showProject, setShowProject] = useState(false);
     const [showPriority, setShowPriority] = useState(false);
+
+    const { data: projectResponse, isLoading: projectsIsLoading, isError: ErrorLoadingProjects } = useGetProjectsQuery();
 
     const dispatch = useAppDispatch();
     const isSidebarCollapsed = useAppSelector((state) => state.theme.isSidebarCollapsed);
@@ -94,6 +97,9 @@ const Sidebar = () => {
                         <ChevronDown className={`size-5 transition-transform duration-300 ${showProject ? 'rotate-180' : 'rotate-0'}`} />
                     </button>
                     {/* Project List */}
+                    {showProject && !projectsIsLoading && !ErrorLoadingProjects && projectResponse?.data?.map((project) => (
+                        <SidebarLink key={project.id} Icon={Briefcase} label={project.name} href={`/projects/${project.id}`} />
+                    ))}
 
 
                     {/* Priority Link */}

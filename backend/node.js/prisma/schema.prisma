@@ -1,0 +1,219 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// Enums removed in favor of numeric values handled in application code
+// TaskStatus: TODO=0, IN_PROGRESS=1, IN_REVIEW=2, BLOCKED=3, DONE=4, CANCELLED=5
+// TaskPriority: LOW=0, MEDIUM=1, HIGH=2, URGENT=3
+
+model User {
+    id                Int     @id @default(autoincrement())
+    cognitoId         String  @unique
+    username          String  @unique
+    email             String  @unique
+    firstName         String?
+    lastName          String?
+    profilePictureUrl String?
+    isActive          Boolean @default(true)
+    teamId            Int?
+
+    createdAt DateTime  @default(now()) @map("created_at")
+    updatedAt DateTime  @updatedAt @map("updated_at")
+    deletedAt DateTime? @map("deleted_at")
+
+    team                  Team?  @relation("TeamMembers", fields: [teamId], references: [id], onDelete: SetNull) // teams user belongs to
+    teamsAsProductOwner   Team[] @relation("TeamProductOwner") // teams user is product owner of
+    teamsAsProjectManager Team[] @relation("TeamProjectManager") // teams user is project manager of
+
+    authoredTasks   Task[]           @relation("TaskAuthor") // tasks user authored / created
+    taskAssignments TaskAssignment[] // tasks user is assigned to
+    attachments     Attachment[] // attachments uploaded by user
+    comments        Comment[] // comments made by user
+    assignedTasks   Task[]           @relation("TaskAssignee") // tasks user is assigned to
+
+    @@index([cognitoId])
+    @@index([email])
+    @@index([teamId])
+    @@index([isActive])
+    @@map("users")
+}
+
+model Team {
+    id                   Int    @id @default(autoincrement())
+    name                 String @unique
+    productOwnerUserId   Int?
+    projectManagerUserId Int?
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    users          User[] @relation("TeamMembers") // users in team
+    productOwner   User?  @relation("TeamProductOwner", fields: [productOwnerUserId], references: [id], onDelete: SetNull) // product owner of team
+    projectManager User?  @relation("TeamProjectManager", fields: [projectManagerUserId], references: [id], onDelete: SetNull) // project manager of team
+
+    projectTeams ProjectTeam[]
+
+    @@map("teams")
+}
+
+model Project {
+    id          Int       @id @default(autoincrement())
+    name        String
+    description String?   @db.Text
+    startDate   DateTime? @map("start_date")
+    endDate     DateTime? @map("end_date")
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    tasks        Task[]
+    projectTeams ProjectTeam[]
+
+    @@index([startDate, endDate])
+    @@map("projects")
+}
+
+model ProjectTeam {
+    id        Int @id @default(autoincrement())
+    projectId Int
+    teamId    Int
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    team    Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+    @@unique([projectId, teamId])
+    @@index([teamId])
+    @@map("project_teams")
+}
+
+model Task {
+    id          Int     @id @default(autoincrement())
+    title       String
+    description String? @db.Text
+    status      Int?    @default(0) // Default: TODO (0)
+    priority    Int?    @default(1) // Default: MEDIUM (1)
+    points      Int?
+
+    projectId      Int?
+    authorUserId   Int?
+    assignedUserId Int?
+
+    startDate DateTime? @map("start_date")
+    dueDate   DateTime? @map("due_date")
+
+    createdAt DateTime  @default(now()) @map("created_at")
+    updatedAt DateTime  @updatedAt @map("updated_at")
+    deletedAt DateTime? @map("deleted_at")
+
+    project         Project?         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    author          User?            @relation("TaskAuthor", fields: [authorUserId], references: [id], onDelete: SetNull)
+    assignee        User?            @relation("TaskAssignee", fields: [assignedUserId], references: [id], onDelete: SetNull)
+    taskAssignments TaskAssignment[]
+    attachments     Attachment[]
+    comments        Comment[]
+    taskTags        TaskTag[]
+
+    @@index([status])
+    @@index([priority])
+    @@index([projectId])
+    @@index([authorUserId])
+    @@index([assignedUserId])
+    @@map("tasks")
+}
+
+model TaskAssignment {
+    id     Int @id @default(autoincrement())
+    taskId Int
+    userId Int
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([taskId, userId])
+    @@index([userId])
+    @@map("task_assignments")
+}
+
+model Attachment {
+    id               Int     @id @default(autoincrement())
+    taskId           Int
+    url              String
+    size             Int?
+    name             String?
+    type             String?
+    uploadedByUserId Int?
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    task       Task  @relation(fields: [taskId], references: [id], onDelete: Cascade)
+    uploadedBy User? @relation(fields: [uploadedByUserId], references: [id], onDelete: SetNull)
+
+    @@index([taskId])
+    @@map("attachments")
+}
+
+model Comment {
+    id      Int    @id @default(autoincrement())
+    content String @db.Text
+    taskId  Int
+    userId  Int
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([taskId])
+    @@map("comments")
+}
+
+model Tag {
+    id    Int     @id @default(autoincrement())
+    name  String  @unique
+    color String?
+
+    taskTags TaskTag[]
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    @@map("tags")
+}
+
+model TaskTag {
+    id     Int @id @default(autoincrement())
+    taskId Int
+    tagId  Int
+
+    task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+    tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+    @@unique([taskId, tagId])
+    @@index([tagId])
+    @@map("task_tags")
+}
+
+model Log {
+    id        Int      @id @default(autoincrement())
+    level     String
+    message   String
+    meta      Json?
+    timestamp DateTime @default(now())
+
+    @@index([level])
+    @@index([timestamp])
+    @@map("logs")
+}
