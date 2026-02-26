@@ -3,6 +3,7 @@
 import ProjectHeader from '@/components/ProjectHeader';
 import Board from '@/components/projects/BoardView';
 import List from '@/components/projects/ListView';
+import Table from '@/components/projects/TableView';
 import TimeLine from '@/components/projects/TimeLineView';
 import { useParams } from 'next/navigation';
 import { useState } from 'react'
@@ -24,6 +25,7 @@ const ShowProject = () => {
             {activeTab === 'Board' && <Board id={id} setIsNewTaskModalOpen={setIsNewTaskModalOpen} />}
             {activeTab === 'List' && <List id={id} setIsNewTaskModalOpen={setIsNewTaskModalOpen} />}
             {activeTab === 'Timeline' && <TimeLine id={id} setIsNewTaskModalOpen={setIsNewTaskModalOpen} />}
+            {activeTab === 'Table' && <Table id={id} setIsNewTaskModalOpen={setIsNewTaskModalOpen} />}
         </>
     )
 }

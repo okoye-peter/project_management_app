@@ -62,7 +62,7 @@ const TaskCard = ({ task }: Props) => {
                 </div>
 
                 {/* Title */}
-                <h3 className='text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-2'>
+                <h3 className='text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 capitalize'>
                     {task.title}
                 </h3>
 

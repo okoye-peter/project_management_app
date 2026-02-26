@@ -4,9 +4,9 @@ import { AlertCircle, AlertOctagon, AlertTriangle, Briefcase, ChevronDown, Home,
 import Image from 'next/image';
 import { useState } from 'react';
 import SidebarLink from './SidebarLink';
-import { useAppDispatch, useAppSelector } from '@/libs/redux/hooks';
-import { setIsSidebarCollapsed } from '@/libs/redux/features/theme/themeSlice';
-import { useGetProjectsQuery } from '@/libs/redux/services/api';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
+import { setIsSidebarCollapsed } from '@/lib/redux/features/theme/themeSlice';
+import { useGetProjectsQuery } from '@/lib/redux/services/api';
 
 const Sidebar = () => {
     const [showProject, setShowProject] = useState(false);

@@ -1,4 +1,4 @@
-import { useGetTasksQuery, useUpdateTaskStatusMutation } from '@/libs/redux/services/api';
+import { useGetTasksQuery, useUpdateTaskStatusMutation } from '@/lib/redux/services/api';
 import { format } from 'date-fns';
 import LoadingOverlay from '../LoadingOverlay';
 import { goeyToast } from 'goey-toast';
@@ -235,7 +235,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
             ref={(instance) => {
                 drag(instance)
             }}
-            className={`mb-3 rounded-md bg-white shadow dark:bg-dark-secondary ${isDragging ? 'opacity-50' : 'opacity-100'}`}
+            className={`mb-3 rounded-md bg-white shadow dark:shadow-lg dark:bg-dark-secondary ${isDragging ? 'opacity-50' : 'opacity-100'}`}
         >
             {/* Display the first attached image as a cover photo for the task card if available */}
             {task.attachments && task.attachments.length > 0 && (
@@ -252,7 +252,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
                 <div className="flex items-start justify-between">
                     <div className="flex flex-1 flex-wrap items-center gap-2">
                         {/* Render the task's priority tag if it has one */}
-                        {task.priority && <PriorityTag priority={task.priority} />}
+                        {task.priority !== undefined && <PriorityTag priority={task.priority} />}
 
                         {/* Render tag labels associated with this task */}
                         <div className="flex gap-2">
@@ -275,7 +275,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
 
                 {/* Task Title & Story Points Section */}
                 <div className='my-3 flex justify-between'>
-                    <h4 className='text-md font-bold dark:text-white'>{task.title}</h4>
+                    <h4 className='text-md font-bold dark:text-white capitalize'>{task.title}</h4>
                     {/* Only render story points if they are defined as a number */}
                     {
                         typeof task.points === 'number' && (
@@ -341,6 +341,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
                     isOpen={isCommentsModalOpen}
                     onClose={() => setIsCommentsModalOpen(false)}
                     taskId={task.id}
+                    taskTitle={task.title}
                 />
             )}
         </div>

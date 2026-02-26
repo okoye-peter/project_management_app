@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import DashboardWrapper from "@/components/layouts/DashboardWrapper";
-import StoreProvider from "@/libs/redux/store";
+import StoreProvider from "@/lib/redux/store";
 import { GoeyToaster } from "@/components/ui/goey-toaster"
 // import ToasterProvider from "@/components/ToasterProvider";
 

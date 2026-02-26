@@ -2,8 +2,8 @@
 
 import { Menu, Moon, Search, Settings, Sun } from 'lucide-react'
 import Link from 'next/link'
-import { useAppDispatch, useAppSelector } from '@/libs/redux/hooks'
-import { setIsDarkMode, setIsSidebarCollapsed } from '@/libs/redux/features/theme/themeSlice'
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks'
+import { setIsDarkMode, setIsSidebarCollapsed } from '@/lib/redux/features/theme/themeSlice'
 const Navbar = () => {
     const dispatch = useAppDispatch();
     const isSidebarCollapsed = useAppSelector((state) => state.theme.isSidebarCollapsed);
@@ -41,9 +41,9 @@ const Navbar = () => {
                 >
                     {
                         isDarkMode ?
-                        <Sun className='cursor-pointer size-5 dark:text-white' />
-                        :
-                        <Moon className='cursor-pointer size-5 dark:text-white' />
+                            <Sun className='cursor-pointer size-5 dark:text-white' />
+                            :
+                            <Moon className='cursor-pointer size-5 dark:text-white' />
                     }
                 </button>
                 <Link

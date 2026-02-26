@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react'
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
-import { useAppSelector } from '@/libs/redux/hooks';
+import { useAppSelector } from '@/lib/redux/hooks';
 
 
 const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {

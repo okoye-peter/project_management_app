@@ -1,4 +1,4 @@
-import { useGetTasksQuery } from '@/libs/redux/services/api';
+import { useGetTasksQuery } from '@/lib/redux/services/api';
 import React from 'react'
 import LoadingOverlay from '../LoadingOverlay';
 import { goeyToast } from 'goey-toast';
@@ -35,9 +35,9 @@ const ListView = ({ id, setIsNewTaskModalOpen }: Props) => {
             </div>
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6'>
                 {
-                tasks?.data?.map((task) => (
-                    <TaskCard key={task.id} task={task} />
-                ))}
+                    tasks?.data?.map((task) => (
+                        <TaskCard key={task.id} task={task} />
+                    ))}
             </div>
         </div>
     )

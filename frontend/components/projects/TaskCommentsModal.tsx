@@ -17,6 +17,7 @@ type Props = {
     isOpen: boolean;
     onClose: () => void;
     taskId: number;
+    taskTitle: string;
 };
 
 // Generate some mock initial comments
@@ -29,7 +30,7 @@ const getInitialMockComments = (taskId: number): Comment[] => Array.from({ lengt
     createdAt: new Date(Date.now() - i * 3600000).toISOString(),
 })).reverse(); // Oldest first
 
-const TaskCommentsModal = ({ isOpen, onClose, taskId }: Props) => {
+const TaskCommentsModal = ({ isOpen, onClose, taskId, taskTitle }: Props) => {
     const [comments, setComments] = useState<Comment[]>(() => getInitialMockComments(taskId));
     const [newCommentText, setNewCommentText] = useState('');
     const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -128,7 +129,7 @@ const TaskCommentsModal = ({ isOpen, onClose, taskId }: Props) => {
                 <div className="flex items-center justify-between border-b p-4 sm:p-6 dark:border-stroke-dark">
                     <div>
                         <h2 className="text-xl font-bold dark:text-white">Task Comments</h2>
-                        <p className="text-sm text-gray-500 dark:text-neutral-400">Task #{taskId}</p>
+                        <p className="text-sm text-gray-500 dark:text-neutral-400">Task: {taskTitle}</p>
                     </div>
                     <button
                         onClick={onClose}
