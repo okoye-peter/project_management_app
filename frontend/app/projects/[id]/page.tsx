@@ -3,6 +3,7 @@
 import ProjectHeader from '@/components/ProjectHeader';
 import Board from '@/components/projects/BoardView';
 import List from '@/components/projects/ListView';
+import NewTaskModal from '@/components/projects/NewTaskModal';
 import Table from '@/components/projects/TableView';
 import TimeLine from '@/components/projects/TimeLineView';
 import { useParams } from 'next/navigation';
@@ -17,6 +18,10 @@ const ShowProject = () => {
     return (
         <>
             {/* MODAL NEW TASK */}
+            <NewTaskModal
+                isOpen={isNewTaskModalOpen}
+                onClose={() => setIsNewTaskModalOpen(false)}
+            />
 
             <ProjectHeader
                 activeTab={activeTab}

@@ -66,7 +66,7 @@ model Project {
     name        String
     description String?   @db.Text
     startDate   DateTime? @map("start_date")
-    endDate     DateTime? @map("end_date")
+    dueDate     DateTime? @map("due_date")
 
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @updatedAt @map("updated_at")
@@ -74,7 +74,7 @@ model Project {
     tasks        Task[]
     projectTeams ProjectTeam[]
 
-    @@index([startDate, endDate])
+    @@index([startDate, dueDate])
     @@map("projects")
 }
 

@@ -12,6 +12,7 @@ export enum TaskPriority {
     MEDIUM = 1,
     HIGH = 2,
     URGENT = 3,
+    BACKLOG = 4,
 }
 
 export interface User {
@@ -45,7 +46,7 @@ export interface Project {
 }
 
 export interface Task {
-    id: number;
+    id?: number;
     title: string;
     description?: string;
     status?: TaskStatus;

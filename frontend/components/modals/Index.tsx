@@ -43,14 +43,14 @@ const Index = ({ children, isOpen, onClose, name }: Props) => {
                         className="relative w-full max-w-2xl overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black/5 dark:bg-dark-secondary dark:ring-white/10"
                     >
                         {/* HEADER SECTION */}
-                        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5 dark:border-stroke-dark">
-                            <Header name={name} isSmallText />
+                        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-3 dark:border-stroke-dark">
+                            <Header name={name} isSmallText className="mb-0!" />
                             <button
                                 onClick={onClose}
-                                className="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-dark-tertiary dark:hover:text-gray-100"
+                                className="flex h-fit p-2 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-dark-tertiary dark:hover:text-gray-100"
                                 aria-label="Close modal"
                             >
-                                <X size={20} strokeWidth={2.5} />
+                                <X size={15} strokeWidth={2.5} />
                             </button>
                         </div>
 
